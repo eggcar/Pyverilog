@@ -20,7 +20,7 @@ from pyverilog.utils.op2mark import op2mark
 from pyverilog.utils.op2mark import op2order
 
 DEFAULT_TEMPLATE_DIR = os.path.dirname(os.path.abspath(__file__)) + '/template/'
-
+TABSIZE = 4 #modified tabsize to 4 spaces
 #-------------------------------------------------------------------------------
 try:
     import textwrap
@@ -79,7 +79,7 @@ def del_space(s):
     return s.replace(' ', '')
 
 class ASTCodeGenerator(ConvertVisitor):
-    def __init__(self, indentsize=2):
+    def __init__(self, indentsize=TABSIZE):#modified tabsize
         self.env = Environment(loader=FileSystemLoader(DEFAULT_TEMPLATE_DIR))
         self.indent = functools.partial(indent, prefix=' '*indentsize)
         self.template_cache = {}
@@ -450,6 +450,30 @@ class ASTCodeGenerator(ConvertVisitor):
         rslt = template.render(template_dict)
         return rslt
         
+# modified indexed partselect according to verilog-2001
+    def visit_IndexedPartselectUpper(self, node):
+        filename = getfilename(node)
+        template = self.get_template(filename)
+        template_dict = {
+            'var' : self.visit(node.var),
+            'base' : del_space(del_paren(self.visit(node.base))),
+            'width' : del_space(del_paren(self.visit(node.width))),
+            }
+        rslt = template.render(template_dict)
+        return rslt
+        
+    def visit_IndexedPartselectLower(self, node):
+        filename = getfilename(node)
+        template = self.get_template(filename)
+        template_dict = {
+            'var' : self.visit(node.var),
+            'base' : del_space(del_paren(self.visit(node.base))),
+            'width' : del_space(del_paren(self.visit(node.width)))
+            }
+        rslt = template.render(template_dict)
+        return rslt
+#!modified indexed partselect according to verilog-2001
+
     def visit_Pointer(self, node):
         filename = getfilename(node)
         template = self.get_template(filename)

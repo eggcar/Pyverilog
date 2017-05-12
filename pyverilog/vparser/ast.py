@@ -299,7 +299,35 @@ class Partselect(Node):
         if self.msb: nodelist.append(self.msb)
         if self.lsb: nodelist.append(self.lsb)
         return tuple(nodelist)
+# Add two extended ast type of indexed partselect according to Verilog-2001 standard
+class IndexedPartselectUpper(Node):
+    attr_names = ()
+    def __init__(self, var, base, width, lineno=0):
+        self.lineno = lineno
+        self.var = var
+        self.base = base
+        self.width = width
+    def children(self):
+        nodelist = []
+        if self.var: nodelist.append(self.var)
+        if self.base: nodelist.append(self.base)
+        if self.width: nodelist.append(self.width)
+        return tuple(nodelist)
 
+class IndexedPartselectLower(Node):
+    attr_names = ()
+    def __init__(self, var, base, width, lineno=0):
+        self.lineno = lineno
+        self.var = var
+        self.base = base
+        self.width = width
+    def children(self):
+        nodelist = []
+        if self.var: nodelist.append(self.var)
+        if self.base: nodelist.append(self.base)
+        if self.width: nodelist.append(self.width)
+        return tuple(nodelist)
+#!Add two extended ast type of indexed partselect according to Verilog-2001 standard
 class Pointer(Node):
     attr_names = ()
     def __init__(self, var, ptr, lineno=0):

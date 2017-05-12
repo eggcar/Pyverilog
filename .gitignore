@@ -1,3 +1,8 @@
 *.pyc
 *.out
 parsetab.py
+pyverilog.egg-info
+.vscode
+build
+dist
+/pyverilog/__pycache__
